@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>{{title}}</title>
+{% endblock title %}
+{% block content %}
+<form method="POST">
+    {{form.hidden_tag()}}
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages%}
+            <p>{{message}}</p>
+        {% endfor %}
+    {% endwith %}
+    <div class="mb-3">
+    {{ form.email.label(class="form-label") }}
+    {{ form.email(class="form-control") }}
+    </div>
+    <div class="mb-3">
+    {{ form.password.label(class="form-label") }}
+    {{ form.password(class="form-control") }}
+    </div>
+    {{ form.submit(class="btn btn-primary bold") }}
+</form>
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>{{ title }}</title>
+{% endblock title %}
+{% block content %}
+<h1>Admin Page</h1>
+<a href={{url_for('registerDoctorView')}}>Register a doctor</a>
+<a href={{url_for('adminLogoutView')}}>Logout</a>
+<a href={{url_for('doctorView')}}>Go to Doctor Dashboard</a>
+<a href={{url_for('home')}}>Home Page</a>
+{% endblock content %}

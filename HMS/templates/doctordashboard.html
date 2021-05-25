@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}<title>{{title}}</title>{% endblock title %}
+{% block content %}
+<h2>Doctor Dashboard</h2>
+<a href={{url_for('adminLogoutView')}}>Logout</a>
+{% if 'admin' == current_user.roles %}
+<a href={{url_for('adminView')}}>Go to admin page</a>
+{% endif %}
+<a href={{url_for('home')}}>Home Page</a>
+{% endblock content %}

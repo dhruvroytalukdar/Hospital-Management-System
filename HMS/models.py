@@ -1,14 +1,21 @@
-from HMS import db
+from HMS import db, login_manager
 import datetime
 import uuid
+from flask_login import UserMixin, current_user
+from flask import redirect, url_for
 
-# Represents a single doctor in the database
-# Doctor(username,first_name,last_name,image_file='if any',password)
+
+@login_manager.user_loader
+def load_user(doctor_id):
+    return Doctor.query.get(doctor_id)
+
+    # Represents a single doctor in the database
+    # Doctor(email,first_name,last_name,image_file='if any',password)
 
 
-class Doctor(db.Model):
+class Doctor(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(70), unique=True, nullable=False)
     password = db.Column(db.String(30), nullable=False)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
@@ -22,6 +29,8 @@ class Doctor(db.Model):
     # Because a doctor can have many specialization and a single specialization can be of many doctors
     specializations = db.relationship(
         'Specialization', secondary='specialization_table', lazy="subquery", backref=db.backref('doctors', lazy=True))
+
+    roles = db.Column(db.String(20), default="staff")
 
     def __repr__(self):
         return f"Doctor({self.first_name} {self.last_name})"

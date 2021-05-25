@@ -1,0 +1,16 @@
+Admin:
+    ability to create specializations
+    ability to add specializations to doctors
+    view all Appointments
+
+Doctors:
+    view their own Appointments
+    modify their credentials
+    delete appointments
+Home:
+    view doctor description
+    view all specialization
+    search doctors by specialization
+    register for an appointment
+    cancel the appointment
+    

@@ -1,13 +1,6 @@
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
-import uuid
+from HMS import db
 import datetime
-
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '89461sdf6ds554f6546546ds54fs646546'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hms.db'
-db = SQLAlchemy(app)
+import uuid
 
 # Represents a single doctor in the database
 # Doctor(username,first_name,last_name,image_file='if any',password)
@@ -91,12 +84,3 @@ class Timeslots(db.Model):
 
     def __repr__(self):
         return f"Time({self.hours}:{self.mins})"
-
-
-@ app.route('/')
-def home():
-    return render_template('home.html', name="Dhruv Roy Talukdar")
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

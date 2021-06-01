@@ -20,6 +20,14 @@
         {{ form.last_name(class="form-control") }}
         </div>
         <div class="mb-3">
+        {{ form.role.label(class="form-label") }}
+        {{ form.role(class="form-control") }}
+        </div>
+        <div class="mb-3">
+        {{ form.specializations.label(class="form-label",for="toggle") }}
+        {{ form.specializations(class="form-control form-options",id="toggle") }}
+        </div>
+        <div class="mb-3">
         {{ form.password.label(class="form-label") }}
         {{ form.password(class="form-control") }}
         </div>
@@ -27,7 +35,6 @@
         {{ form.confirm_password.label(class="form-label") }}
         {{ form.confirm_password(class="form-control") }}
         </div>
-        
         {{ form.submit(class="btn btn-primary bold") }}
     </form>
 </div>

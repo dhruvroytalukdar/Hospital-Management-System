@@ -2,7 +2,7 @@ from HMS import db, login_manager
 import datetime
 import uuid
 from flask_login import UserMixin, current_user
-from flask import redirect, url_for
+from flask import redirect
 
 
 @login_manager.user_loader
@@ -28,7 +28,7 @@ class Doctor(db.Model, UserMixin):
     # Many to many relationship with the specialization table
     # Because a doctor can have many specialization and a single specialization can be of many doctors
     specializations = db.relationship(
-        'Specialization', secondary='specialization_table', lazy="subquery", backref=db.backref('doctors', lazy=True))
+        'Specialization', cascade="delete", secondary='specialization_table', lazy="subquery", backref=db.backref('doctors', lazy=True))
 
     roles = db.Column(db.String(20), default="staff")
 

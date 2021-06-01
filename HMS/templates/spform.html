@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>{{ title }}</title>
+{% endblock %}
+{% block content %}
+<div class="form-layout">
+    <h2 class="form-title">Register Doctor</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary bold") }}
+    </form>
+</div>
+{% endblock %}

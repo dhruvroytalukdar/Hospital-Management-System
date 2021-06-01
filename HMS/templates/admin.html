@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-<title>{{ title }}</title>
+    <title>{{ title }}</title>
 {% endblock title %}
 {% block content %}
 <h1>Admin Page</h1>
@@ -8,4 +8,42 @@
 <a href={{url_for('adminLogoutView')}}>Logout</a>
 <a href={{url_for('doctorView')}}>Go to Doctor Dashboard</a>
 <a href={{url_for('home')}}>Home Page</a>
+{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <p>{{message}}</p>
+    {% endfor %}
+    <div>
+        <h2 class="form-title">Create Specialization</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary bold") }}
+        </form>
+    </div>
+{% endwith %}
+<ul class="list">
+
+<h2>Our current specializations</h2>
+    {% for sp in list %}
+    <div>
+        <li>{{sp.name}}</li>
+        <a class="btn btn-danger" href={{url_for('specializationDeleteView',variable=sp.name)}}>Delete</a>
+    </div>
+    {% endfor %}
+</ul>
+<ul class="list">
+<h2>Our doctors</h2>
+    {% for doc in doctors %}
+    <div>
+        <li>Dr. {{doc.first_name}} {{doc.last_name}} <span><pre>"{{doc.roles}}"</pre></span></li>
+        <a href={{url_for('doctorDeleteView',variable=doc.id)}}>Delete</a>
+        {% for sp in doc.specializations %}
+            <span><strong>{{sp.name}}</strong></span>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</ul>
 {% endblock content %}

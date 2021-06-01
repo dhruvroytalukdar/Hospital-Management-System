@@ -6,7 +6,7 @@
 
 .form-layout{
   width:50%;
-  margin:0 auto;
+  margin:2rem auto;
   height:100vh;
   display: flex;
   flex-direction: column;
@@ -15,6 +15,7 @@
 
 .form-title{
   margin-bottom: 1.5rem;
+  
 }
 
 .bold{
@@ -23,4 +24,41 @@
 
 .form-layout form{
   width:100%;
+}
+
+.form-options{
+  list-style: none;
+  height:142px !important;
+  overflow:auto;
+}
+
+#toggle::-webkit-scrollbar {
+  display: none;
+}
+
+#toggle input{
+  position:absolute;
+  left:-9999px;
+}
+
+label{
+  user-select: none;
+}
+
+#toggle label{
+  margin: 0.3rem 0.2rem;
+  padding: 0.2rem;
+  width:100%;
+}
+
+#toggle label::before{
+  font-family: "Material Icons";
+  content: "\e5cd";
+  margin-right: 10px;
+}
+
+input:checked + label::before{
+  font-family: "Material Icons";
+  content: "\e876"!important;
+  margin-right: 10px;
 }

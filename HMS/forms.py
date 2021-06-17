@@ -8,7 +8,8 @@ def getSpecializations():
     li = Specialization.query.all()
     ans = []
     for sp in li:
-        ans.append((sp.name, sp.name))
+        if(sp.name != "General Medicine"):
+            ans.append((sp.name, sp.name))
     print('returned list', ans)
     return ans
 

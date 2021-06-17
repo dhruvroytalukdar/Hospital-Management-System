@@ -5,10 +5,13 @@ from flask import render_template, redirect, url_for, flash
 from HMS import app, bcrypt, db
 from HMS.forms import *
 
+# Route to delete a specialization
+# Restricted to admins
+
 
 @app.route('/delete/<variable>', methods=['GET'])
+@requires_roles('admin')
 def specializationDeleteView(variable):
-    print(variable)
     s = Specialization.query.filter_by(name=variable).first()
     for d in s.doctors:
         d.specializations.remove(s)
@@ -21,16 +24,23 @@ def specializationDeleteView(variable):
     return redirect(url_for('adminView'))
 
 
+# Route to delete a doctor
+# Restricted to admins
+
+
 @app.route('/delete/doctor/<variable>', methods=['GET'])
+@requires_roles('admin')
 def doctorDeleteView(variable):
     print("Doctor", variable)
     doc = Doctor.query.filter_by(id=variable).first()
-    for sp in doc.specializations:
-        sp.doctors.remove(doc)
+    doc.specializations.clear()
     Doctor.query.filter_by(id=variable).delete()
     db.session.commit()
     flash('Account deleted successfully')
     return redirect(url_for('adminView'))
+
+# Home page
+# Unrestricted
 
 
 @app.route('/')
@@ -38,27 +48,45 @@ def home():
     return render_template('home.html', name="Dhruv Roy Talukdar")
 
 
+# Route to register doctors
+# Restricted to admins
+
 @app.route('/admin/register/doctor', methods=['POST', 'GET'])
 @requires_roles('admin')
 def registerDoctorView():
     form = DocterRegistrationForm()
-    print(form.specializations.data)
+    # print(form.specializations.data)
     if form.validate_on_submit():
         doctor = Doctor.query.filter_by(email=form.email.data).first()
+
+        # Check if the doctor with that name already exists
         if doctor is not None:
             flash(f'User with that email already exists please try another one')
             form = DocterRegistrationForm()
             return render_template('register.html', form=form, title='Register')
         password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
+
+        # Intialize doctor variable
         doctor = Doctor(email=form.email.data, password=password,
                         first_name=form.first_name.data, last_name=form.last_name.data)
+
+        # Append all the selected specializations
         for sp in form.specializations.data:
             doctor.specializations.append(
                 Specialization.query.filter_by(name=sp).first())
+
+        # Append "General Medicine" by default
+        doctor.specializations.append(
+            Specialization.query.filter_by(name="General Medicine").first())
+
         doctor.roles = form.role.data
+
+        # Create the doctor tuple in the database
         db.session.add(doctor)
         db.session.commit()
+
+        # Return a flash message indicating successful creation of new doctor
         flash(f'Account created for {doctor.email}', 'success')
         return redirect(url_for('home'))
     return render_template('register.html', form=form, title='Register')
@@ -94,6 +122,7 @@ def adminLogoutView():
 
 def getSpecializations():
     li = Specialization.query.all()
+    li.remove(Specialization.query.filter_by(name="General Medicine").first())
     return li
 
 
@@ -120,6 +149,5 @@ def adminView():
             sp = Specialization(name=name)
             db.session.add(sp)
             db.session.commit()
-            spform = CreateSpecializationForm()
             return redirect(url_for('adminView'))
     return render_template('admin.html', title="Admin Page", form=spform, list=get_list, doctors=doctor_list)

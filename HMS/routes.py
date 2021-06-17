@@ -13,11 +13,7 @@ from HMS.forms import *
 @requires_roles('admin')
 def specializationDeleteView(variable):
     s = Specialization.query.filter_by(name=variable).first()
-    for d in s.doctors:
-        d.specializations.remove(s)
-        if len(d.specializations) == 0:
-            d.specializations.append(Specialization.query.filter_by(
-                name="General Medicine").first())
+    s.doctors.clear()
     Specialization.query.filter_by(name=variable).delete()
     db.session.commit()
     flash('Specialization deleted successfully')
